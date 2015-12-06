@@ -19,8 +19,7 @@ def find_freq(param, wave_mode='pfh', show_plot=False):
     ----------
     param = [target_kz, target_kp, target_beta,
              target_t, target_a, target_n,
-             target_q, target_m, target_v,
-             n, method, target_aol]
+             target_v, target_aol]
     wave_mode:
               'pfh'--> parallel firehose (right hand)
               'ic'--> parallel ion-cyclotron mode (left hand)
@@ -43,6 +42,7 @@ def find_freq(param, wave_mode='pfh', show_plot=False):
 
     
     # default initial parameters
+    """
     betap = 1.
     t_list=[1., 1., 1., 1.]
     a_list=[1., 1., 1., 1.]
@@ -50,13 +50,22 @@ def find_freq(param, wave_mode='pfh', show_plot=False):
     q_list=[1., 1, 2, -1.]
     m_list=[1., 1., 4., 1/1836]
     v_list=[0, 0, 0, 0]
+    """
+    betap=3.16
+    t_list = [1., 1., 4., 1.]
+    a_list = [0.5, 1., 1., 1.]
+    n_list = [1., 0, 0.05, 1.1]
+    q_list=[1., 1, 2, -1.]
+    m_list=[1., 1., 4., 1/1836]
+    v_list=[0, 0, 0, 0]
+
     method = 'numpy'
     aol = 1/5000.
     n = 10
 
     if wave_mode == 'pfh': # parallel firehose
-        kp, kz = 0, 0.1
-        seed_freq = 0.1
+        kp, kz = 0, 0.5*np.sqrt(2)  #0.1
+        seed_freq = 0.37 #0.028
     elif wave_mode == 'ic': # ion cyclotron
         kp, kz = 0, 0.1
         seed_freq = 0.1 # MODIFY HERE
@@ -83,14 +92,14 @@ def find_freq(param, wave_mode='pfh', show_plot=False):
     freq2, param2, freq_lst = follow_beta(
         seed_freq, target_beta, param1,
         log_incrmt=log_inc, incrmt_method='log', show_plot = show_plot)
-
+    
     # follow along anisotropy
     seed_freq = freq2
     log_inc = 0.05
     freq3, param3, freq_lst = follow_anisotropy(
         seed_freq, target_a, param2, log_incrmt=log_inc,
         incrmt_method = 'log', show_plot = show_plot)
-
+    
     # follow along temperature ratio
     seed_freq = freq3
     log_inc = 0.05
@@ -109,8 +118,7 @@ def find_freq(param, wave_mode='pfh', show_plot=False):
     seed_freq = freq5
     log_inc = 0.05
     freq6, param6, freq_lst= follow_kz(
-        seed_freq, target_kz, param, show_plot=show_plot,
+        seed_freq, target_kz, param5, show_plot=show_plot,
         log_incrmt=log_inc, incrmt_method = 'log')
-
 
     return freq6
