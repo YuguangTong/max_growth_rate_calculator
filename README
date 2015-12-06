@@ -1,0 +1,25 @@
+This repo contains a set of procedure to calculate maximum
+growth rate of a few plasma instabilities in given plasmas.
+
+to_dimensionless.py:
+	process in-situ data and make necessary simplications.
+	save the data in an npz file.
+
+find_start_freq:
+	make preparation for k-space search by following an
+	interested wave mode from known plasma along some
+	path in phase space till parameters are adjusted to
+	that in the interested plasmas. return a frequency
+	for a specified wavenumber.
+
+kspace_search:
+	search wavenumber vector space for the maximum growth
+	rate.
+
+N.B. 
+     1, to_dimensionless.py is taylored for my input data so you
+     need to adapt it to your input.
+     2, find_start_freq.py relies on vlasov_solver package, which
+     can be found here
+          https://github.com/YuguangTong/vlasov_solver
+     3, numpy and scipy are necessary.
